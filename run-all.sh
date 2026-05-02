@@ -14,9 +14,12 @@ fi
 # Variables globales
 ########################################
 
-# On charge la configuration commune (PostgreSQL, etc.)
+# Racine du projet (là où se trouve run-all.sh)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "${SCRIPT_DIR}/config.sh"
+SRC_DIR="${SCRIPT_DIR}/src"
+
+# On charge la configuration commune
+. "${SRC_DIR}/config.sh"
 
 ########################################
 # Fonctions utilitaires
@@ -114,35 +117,47 @@ deploy_postgres_container() {
 }
 
 ########################################
-# Hooks pour les autres parties du projet
+# Exécution des scripts du projet
 ########################################
 
 run_other_scripts() {
-  log "Exécution des autres scripts du projet si présents et exécutables..."
+  log "Exécution des scripts du projet..."
 
-  # Exemple : script pour la partie SSH
-  if [ -x "${SCRIPT_DIR}/setup_ssh.sh" ]; then
-    log "-> Execution de ${SCRIPT_DIR}/setup_ssh.sh"
-    "${SCRIPT_DIR}/setup_ssh.sh"
+  # SSH (partie collègue)
+  if [ -f "${SRC_DIR}/setup_ssh.sh" ]; then
+    log "-> setup_ssh.sh"
+    bash "${SRC_DIR}/setup_ssh.sh"
   else
-    log "-> setup_ssh.sh non trouvé ou non exécutable (ok pour l'instant)."
+    log "-> setup_ssh.sh non trouvé (ok pour l'instant)."
   fi
 
-  # Exemple : script pour firewall + SFTP + cron backup PostgreSQL
-  if [ -x "${SCRIPT_DIR}/setup_sftp_firewall_backup.sh" ]; then
-    log "-> Execution de ${SCRIPT_DIR}/setup_sftp_firewall_backup.sh"
-    "${SCRIPT_DIR}/setup_sftp_firewall_backup.sh"
+  # Pare-feu iptables
+  if [ -f "${SRC_DIR}/setup_firewall.sh" ]; then
+    log "-> setup_firewall.sh"
+    bash "${SRC_DIR}/setup_firewall.sh"
   else
-    log "-> setup_sftp_firewall_backup.sh non trouvé ou non exécutable (ok pour l'instant)."
+    log "-> setup_firewall.sh non trouvé (ok pour l'instant)."
   fi
 
-  # Ici tu pourras rajouter d'autres scripts au fur et à mesure du projet :
-  # if [ -x "./setup_meteo_cron.sh" ]; then
-  #   ./setup_meteo_cron.sh
-  # fi
-  #
-  # if [ -x "./setup_flutter_service.sh" ]; then
-  #   ./setup_flutter_service.sh
+  # Serveur SFTP (vsftpd) + backup PostgreSQL
+  if [ -f "${SRC_DIR}/setup_sftp.sh" ]; then
+    log "-> setup_sftp.sh"
+    bash "${SRC_DIR}/setup_sftp.sh"
+  else
+    log "-> setup_sftp.sh non trouvé (ok pour l'instant)."
+  fi
+
+  # Météo (cron 6h → motd) + Jours fériés
+  if [ -f "${SRC_DIR}/setup_meteo_feries.sh" ]; then
+    log "-> setup_meteo_feries.sh"
+    bash "${SRC_DIR}/setup_meteo_feries.sh"
+  else
+    log "-> setup_meteo_feries.sh non trouvé (ok pour l'instant)."
+  fi
+
+  # Flutter service systemd (à venir)
+  # if [ -f "${SRC_DIR}/setup_flutter_service.sh" ]; then
+  #   bash "${SRC_DIR}/setup_flutter_service.sh"
   # fi
 }
 
