@@ -30,6 +30,28 @@ log() {
 }
 
 ########################################
+# Création de l'utilisateur système
+########################################
+
+setup_system_user() {
+  if id "${SYSTEM_USER}" >/dev/null 2>&1; then
+    log "Utilisateur ${SYSTEM_USER} déjà existant."
+  else
+    log "Création de l'utilisateur ${SYSTEM_USER}..."
+    useradd -m -s /bin/bash "${SYSTEM_USER}"
+    echo "${SYSTEM_USER}:${SYSTEM_USER_PASSWORD}" | chpasswd
+    usermod -aG sudo "${SYSTEM_USER}"
+    log "Utilisateur ${SYSTEM_USER} créé (sudo activé)."
+  fi
+
+  # Hostname
+  if [ "$(hostname)" != "${HOSTNAME_VM}" ]; then
+    log "Définition du hostname : ${HOSTNAME_VM}..."
+    hostnamectl set-hostname "${HOSTNAME_VM}"
+  fi
+}
+
+########################################
 # Installation de Docker
 ########################################
 
@@ -123,12 +145,20 @@ deploy_postgres_container() {
 run_other_scripts() {
   log "Exécution des scripts du projet..."
 
-  # SSH (partie collègue)
+  # SSH
   if [ -f "${SRC_DIR}/setup_ssh.sh" ]; then
     log "-> setup_ssh.sh"
     bash "${SRC_DIR}/setup_ssh.sh"
   else
     log "-> setup_ssh.sh non trouvé (ok pour l'instant)."
+  fi
+
+  # ZSH + Oh My Zsh + thème Haribo
+  if [ -f "${SRC_DIR}/setup_zsh.sh" ]; then
+    log "-> setup_zsh.sh"
+    bash "${SRC_DIR}/setup_zsh.sh"
+  else
+    log "-> setup_zsh.sh non trouvé (ok pour l'instant)."
   fi
 
   # Pare-feu iptables
@@ -166,6 +196,7 @@ run_other_scripts() {
 ########################################
 
 main() {
+  setup_system_user
   install_docker
   deploy_postgres_container
   run_other_scripts

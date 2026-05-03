@@ -2,6 +2,11 @@
 
 # Configuration commune pour la base PostgreSQL du projet
 
+# Utilisateur système principal (exigé par le sujet)
+SYSTEM_USER="modo"
+SYSTEM_USER_PASSWORD="qwerty123"
+HOSTNAME_VM="linux-exam-vm"
+
 # Nom du conteneur Docker PostgreSQL
 PG_CONTAINER_NAME="postgres-db"
 

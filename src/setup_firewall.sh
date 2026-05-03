@@ -11,8 +11,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "${SCRIPT_DIR}/config.sh"
 
-# firewall-script.sh est à la racine du projet (un niveau au-dessus de src/)
-FIREWALL_SCRIPT_SRC="${SCRIPT_DIR}/../firewall-script.sh"
+# firewall-script.sh est dans src/ avec les autres scripts
+FIREWALL_SCRIPT_SRC="${SCRIPT_DIR}/firewall-script.sh"
 
 log() {
   echo "[INFO] $*"
