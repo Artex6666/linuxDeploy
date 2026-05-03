@@ -1,15 +1,4 @@
-SFTP Server Identifiers
-=======================
-
-Protocol  : FTPS (FTP over explicit TLS) — vsftpd
-Host      : <IP de la VM>
-Port      : 21
-
-Username  : sftpuser
-Password  : ChangeMe123!
-
-Chroot directory : /srv/sftp-data
-
-Note: The user is restricted to /srv/sftp-data (chroot jail).
-      A self-signed SSL certificate is used for TLS encryption.
-      Accept the certificate warning in your FTP client (e.g. FileZilla).
+User: sftpuser
+Password: mdp
+Directory: /srv/sftp-data
+Port: 21

@@ -158,10 +158,22 @@ EOF
 # Main
 ############################################
 
+generate_sftp_identifiers() {
+  IDENTIFIERS_FILE="${SCRIPT_DIR}/../sftp-identifiers.txt"
+  cat > "${IDENTIFIERS_FILE}" <<EOF
+User: ${FTP_USER}
+Password: ${FTP_PASSWORD}
+Directory: ${FTP_ROOT_DIR}
+Port: 21
+EOF
+  log "sftp-identifiers.txt généré."
+}
+
 main() {
   install_packages
   setup_pg_backup
   setup_vsftpd
+  generate_sftp_identifiers
   log "setup_sftp.sh terminé."
 }
 

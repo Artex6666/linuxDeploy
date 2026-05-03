@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="${SCRIPT_DIR}/.."
 . "${SCRIPT_DIR}/config.sh"
 
-SSH_USER="${SYSTEM_USER}"
+SSH_USER="modo"
 SSH_DIR="/home/${SSH_USER}/.ssh"
 KEY_FILE="${SSH_DIR}/id_ed25519"
 SSHD_CONFIG="/etc/ssh/sshd_config"

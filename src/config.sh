@@ -2,10 +2,8 @@
 
 # Configuration commune pour la base PostgreSQL du projet
 
-# Utilisateur système principal (exigé par le sujet)
-SYSTEM_USER="modo"
-SYSTEM_USER_PASSWORD="qwerty123"
-HOSTNAME_VM="linux-exam-vm"
+# Discord webhook pour notifications Flutter
+DISCORD_WEBHOOK="https://discord.com/api/webhooks/1500509203880607886/323jhx8HkRF6u39qucTdsieAKMFi6xQKx2UTqQU6GGlsstG5cc-Az_S9eTw033xDAE9m"
 
 # Nom du conteneur Docker PostgreSQL
 PG_CONTAINER_NAME="postgres-db"
@@ -34,7 +32,7 @@ FIREWALL_SERVICE="/etc/systemd/system/firewall-rules.service"
 
 # FTP / SFTP (vsftpd)
 FTP_USER="sftpuser"
-FTP_PASSWORD="ChangeMe123!"     # à changer pour la démo
+FTP_PASSWORD="mdp"
 FTP_ROOT_DIR="/srv/sftp-data"
 VSFTPD_CONF="/etc/vsftpd.conf"
 VSFTPD_SSL_DIR="/etc/ssl/vsftpd"
