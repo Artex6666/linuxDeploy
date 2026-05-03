@@ -28,7 +28,8 @@ else
 fi
 
 # Notification Discord
-SUMMARY=$(tail -5 "${LOG_FILE}" | tr '\n' ' ')
+SUMMARY=$(cat "${LOG_FILE}")
+MESSAGE="$(printf '**Flutter integrity check**\n```\n%s\n```' "${SUMMARY}")"
 curl -s -X POST "${DISCORD_WEBHOOK}" \
   -H "Content-Type: application/json" \
-  -d "{\"content\": \"**Flutter integrity check** — $(date '+%Y-%m-%d %H:%M')\n\`\`\`${SUMMARY}\`\`\`\"}"
+  -d "$(jq -n --arg content "${MESSAGE}" '{content: $content}')"
