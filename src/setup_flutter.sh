@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-############################################
-# setup_flutter.sh
-# - Installe le SDK Flutter dans /opt/flutter
-# - Déploie le script de vérification d'intégrité
-# - Crée un service + timer systemd (quotidien)
-############################################
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "${SCRIPT_DIR}/config.sh"
 
@@ -17,57 +10,52 @@ CHECK_SCRIPT="/usr/local/sbin/flutter_check.sh"
 SERVICE_FILE="/etc/systemd/system/flutter-integrity.service"
 TIMER_FILE="/etc/systemd/system/flutter-integrity.timer"
 
-log() {
-  echo "[INFO] $*"
-}
+log() { echo "[INFO] $*"; }
 
 ############################################
-# 1. Installation des dépendances
+# 1. Dépendances
 ############################################
 
 install_deps() {
-  log "Installation des dépendances Flutter..."
   apt-get update -y
   apt-get install -y curl git unzip xz-utils
 }
 
 ############################################
-# 2. Installation du SDK Flutter
+# 2. SDK Flutter
 ############################################
 
 install_flutter() {
   if [ -d "${FLUTTER_SDK}" ]; then
-    log "SDK Flutter déjà présent dans ${FLUTTER_SDK}."
+    log "SDK Flutter déjà présent."
     return
   fi
 
-  log "Téléchargement et installation du SDK Flutter..."
   git clone https://github.com/flutter/flutter.git -b stable "${FLUTTER_SDK}"
   chown -R "${FLUTTER_USER}:${FLUTTER_USER}" "${FLUTTER_SDK}"
 
-  # Pré-téléchargement des binaires dart
+  git config --global --add safe.directory "${FLUTTER_SDK}" || true
+  sudo -u "${FLUTTER_USER}" git config --global --add safe.directory "${FLUTTER_SDK}" || true
+
   sudo -u "${FLUTTER_USER}" "${FLUTTER_SDK}/bin/flutter" precache || true
-  log "SDK Flutter installé dans ${FLUTTER_SDK}."
+  log "SDK Flutter installé."
 }
 
 ############################################
-# 3. Déploiement du script de vérification
+# 3. Script de vérification
 ############################################
 
 deploy_check_script() {
-  log "Déploiement du script de vérification..."
   sed "s|__DISCORD_WEBHOOK__|${DISCORD_WEBHOOK}|g" \
     "${SCRIPT_DIR}/flutter_check.sh" > "${CHECK_SCRIPT}"
   chmod +x "${CHECK_SCRIPT}"
 }
 
 ############################################
-# 4. Service + timer systemd
+# 4. Service systemd
 ############################################
 
 setup_systemd() {
-  log "Création du service systemd flutter-integrity..."
-
   cat > "${SERVICE_FILE}" <<EOF
 [Unit]
 Description=Flutter SDK integrity check
@@ -94,13 +82,8 @@ EOF
   systemctl daemon-reload
   systemctl enable flutter-integrity.timer
   systemctl start flutter-integrity.timer
-
-  log "Service flutter-integrity activé (quotidien)."
+  log "Service flutter-integrity activé."
 }
-
-############################################
-# Main
-############################################
 
 main() {
   install_deps
@@ -108,10 +91,8 @@ main() {
   deploy_check_script
   setup_systemd
 
-  log "Exécution immédiate du check pour vérification..."
-  bash "${CHECK_SCRIPT}" || true
-
-  log "setup_flutter.sh terminé."
+  log "Vérification immédiate..."
+  sudo -u "${FLUTTER_USER}" bash "${CHECK_SCRIPT}" || true
 }
 
 main "$@"
