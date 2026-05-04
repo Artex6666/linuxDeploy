@@ -4,4 +4,4 @@ Bonus réalisés :
 
 2. Notification Discord — envoi automatique d'un message dans un canal Discord après chaque vérification d'intégrité Flutter.
 
-3. Script run-all.sh — script principal permettant de tout configurer automatiquement sur une VM vierge (Docker, PostgreSQL, SSH, pare-feu, SFTP, backup, météo, jours fériés, Flutter). Lancé avec : sudo bash run-all.sh
+3. Script run-all.sh — script principal permettant de tout configurer automatiquement sur une VM vierge (Docker, PostgreSQL (et schema), SSH, pare-feu, SFTP, backup, météo, jours fériés, Flutter). Lancé avec : sudo bash run-all.sh

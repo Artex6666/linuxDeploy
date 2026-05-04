@@ -70,6 +70,7 @@ deploy_postgres() {
 main() {
   install_docker
   deploy_postgres
+  run_script setup_db_schema.sh
   run_script setup_ssh.sh
   run_script setup_firewall.sh
   run_script setup_sftp.sh
