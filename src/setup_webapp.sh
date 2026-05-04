@@ -54,7 +54,6 @@ install_strapi() {
       --dbpassword="${PG_DB_PASSWORD}" \
       --dbssl=false \
       --no-example \
-      --no-typescript \
       --no-git-init
 
   chown -R "${STRAPI_USER}:${STRAPI_USER}" "${APP_DIR}"
