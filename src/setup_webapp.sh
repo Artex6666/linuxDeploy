@@ -39,14 +39,23 @@ install_strapi() {
 
   log "Création du projet Strapi (peut prendre quelques minutes)..."
 
-  sudo -u "${STRAPI_USER}" env \
-    DATABASE_CLIENT=postgres \
-    DATABASE_HOST=127.0.0.1 \
-    DATABASE_PORT="${PG_PORT}" \
-    DATABASE_NAME="${PG_DB_NAME}" \
-    DATABASE_USERNAME="${PG_DB_USER}" \
-    DATABASE_PASSWORD="${PG_DB_PASSWORD}" \
-    npx create-strapi-app@latest "${APP_DIR}" --no-run --skip-cloud
+  mkdir -p "${APP_DIR}"
+  chown "${STRAPI_USER}:${STRAPI_USER}" "${APP_DIR}"
+
+  sudo -u "${STRAPI_USER}" \
+    npx create-strapi-app@latest "${APP_DIR}" \
+      --no-run \
+      --skip-cloud \
+      --dbclient=postgres \
+      --dbhost=127.0.0.1 \
+      --dbport="${PG_PORT}" \
+      --dbname="${PG_DB_NAME}" \
+      --dbusername="${PG_DB_USER}" \
+      --dbpassword="${PG_DB_PASSWORD}" \
+      --dbssl=false \
+      --no-example \
+      --no-typescript \
+      --no-git-init
 
   chown -R "${STRAPI_USER}:${STRAPI_USER}" "${APP_DIR}"
   log "Strapi installé dans ${APP_DIR}."
