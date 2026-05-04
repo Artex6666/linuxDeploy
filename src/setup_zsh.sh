@@ -6,7 +6,6 @@ ZSH_HOME="/home/${ZSH_USER}"
 OMZ_DIR="${ZSH_HOME}/.oh-my-zsh"
 ZSHRC="${ZSH_HOME}/.zshrc"
 THEMES_DIR="${OMZ_DIR}/themes"
-HARIBO_URL="https://raw.githubusercontent.com/haribo/omz-haribo-theme/master/haribo.zsh-theme"
 
 log() { echo "[INFO] $*"; }
 
@@ -40,8 +39,23 @@ install_ohmyzsh() {
 
 install_haribo() {
   mkdir -p "${THEMES_DIR}"
-  curl -fsSL "${HARIBO_URL}" -o "${THEMES_DIR}/haribo.zsh-theme"
+  cat > "${THEMES_DIR}/haribo.zsh-theme" <<'THEME'
+local _lineup=$'\e[1A'
+local _linedown=$'\e[1B'
+
+PROMPT='%{%f%k%b%}
+$(git_prompt_info)$(hg_prompt_info)%{${fg_bold[green]}%}%n%{${fg[default]}%}@%{${fg_bold[green]}%}%m %{${fg_bold[blue]}%}%~ %{${fg[default]}%}
+$ %{$reset_color%}'
+
+RPROMPT='%{${_lineup}%}%{${fg_bold[yellow]}%}%D{%H:%M:%S}%{${fg[default]}%}%{${_linedown}%}'
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{${fg_bold[blue]}%}git:(%{${fg_bold[red]}%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_DIRTY="%{${fg_bold[blue]}%}) %{${fg_bold[yellow]}%}✗"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{${fg_bold[blue]}%})"
+THEME
   chown "${ZSH_USER}:${ZSH_USER}" "${THEMES_DIR}/haribo.zsh-theme"
+  log "Thème Haribo installé."
 }
 
 ############################################
