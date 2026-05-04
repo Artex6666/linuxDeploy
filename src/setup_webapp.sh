@@ -46,7 +46,7 @@ install_strapi() {
     DATABASE_NAME="${PG_DB_NAME}" \
     DATABASE_USERNAME="${PG_DB_USER}" \
     DATABASE_PASSWORD="${PG_DB_PASSWORD}" \
-    npx create-strapi-app@latest "${APP_DIR}" --no-run --skip-cloud --ts=false
+    npx create-strapi-app@latest "${APP_DIR}" --no-run --skip-cloud --no-typescript
 
   chown -R "${STRAPI_USER}:${STRAPI_USER}" "${APP_DIR}"
   log "Strapi installé dans ${APP_DIR}."

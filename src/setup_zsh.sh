@@ -6,7 +6,7 @@ ZSH_HOME="/home/${ZSH_USER}"
 OMZ_DIR="${ZSH_HOME}/.oh-my-zsh"
 ZSHRC="${ZSH_HOME}/.zshrc"
 THEMES_DIR="${OMZ_DIR}/themes"
-HARIBO_URL="https://raw.githubusercontent.com/nicoulaj/haribo-zsh-theme/master/haribo.zsh-theme"
+HARIBO_URL="https://raw.githubusercontent.com/haribo/omz-haribo-theme/master/haribo.zsh-theme"
 
 log() { echo "[INFO] $*"; }
 
