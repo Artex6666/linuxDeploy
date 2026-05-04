@@ -36,8 +36,6 @@ install_flutter() {
 
   git config --global --add safe.directory "${FLUTTER_SDK}" || true
   sudo -u "${FLUTTER_USER}" git config --global --add safe.directory "${FLUTTER_SDK}" || true
-
-  sudo -u "${FLUTTER_USER}" "${FLUTTER_SDK}/bin/flutter" precache || true
   log "SDK Flutter installé."
 }
 
@@ -82,6 +80,10 @@ EOF
   systemctl daemon-reload
   systemctl enable flutter-integrity.timer
   systemctl start flutter-integrity.timer
+
+  touch /var/log/flutter-integrity.log
+  chown "${FLUTTER_USER}:${FLUTTER_USER}" /var/log/flutter-integrity.log
+
   log "Service flutter-integrity activé."
 }
 

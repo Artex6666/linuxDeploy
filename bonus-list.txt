@@ -1,0 +1,7 @@
+Bonus réalisés :
+
+1. Docker — utilisation de conteneurs pour déployer PostgreSQL et ses dépendances.
+
+2. Notification Discord — envoi automatique d'un message dans un canal Discord après chaque vérification d'intégrité Flutter.
+
+3. Script run-all.sh — script principal permettant de tout configurer automatiquement sur une VM vierge (Docker, PostgreSQL, SSH, pare-feu, SFTP, backup, météo, jours fériés, Flutter). Lancé avec : sudo bash run-all.sh
