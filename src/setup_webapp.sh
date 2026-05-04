@@ -101,7 +101,7 @@ EOF
 
 build_strapi() {
   log "Build de l'admin Strapi..."
-  sudo -u "${STRAPI_USER}" bash -c "cd ${APP_DIR} && NODE_ENV=production npm run build"
+  sudo -u "${STRAPI_USER}" bash -c "cd ${APP_DIR} && NODE_ENV=production NODE_OPTIONS=--max-old-space-size=1536 npm run build"
 }
 
 ############################################
